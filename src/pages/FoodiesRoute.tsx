@@ -52,7 +52,7 @@ export function FoodiesRoute() {
     setCurrentLocationQuery(value);
     setDeliveryLocation(value);
     setShowCurrentLocationSuggestions(false);
-    setShowRecentAddresses(value.length === 0);
+    setShowRecentAddresses(value.length === 0 && activeLocationInput === 'current-location');
   };
 
   const handleCurrentLocationSelect = (address: string) => {
@@ -302,15 +302,33 @@ export function FoodiesRoute() {
       <div className="flex-1 overflow-y-auto pt-40 px-3 pb-20">
         {showRecentAddresses && (
           <div className="space-y-2">
-            <p className="text-[10px] text-gray-500 px-2">Recent addresses</p>
-            {mockDeliveryAddresses.slice(0, 6).map((addr) => (
+            <p className="text-[10px] text-gray-500 px-2">
+              {currentLocationQuery === '' ? 'Suggested locations' : 'Recent addresses'}
+            </p>
+
+            {currentLocationQuery === '' && currentLocation && activeLocationInput === 'current-location' && (
+              <motion.button
+                onClick={() => handleCurrentLocationSelect(currentLocation)}
+                className="w-full flex items-center gap-3 p-3 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors shadow-sm border border-blue-200"
+                whileTap={{ scale: 0.98 }}
+              >
+                <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
+                  <Clock size={16} className="text-white" />
+                </div>
+                <div className="flex-1 text-left">
+                  <p className="font-medium text-gray-900 text-xs">Current location</p>
+                  <p className="text-[10px] text-gray-600">{currentLocation.split(',')[0]}</p>
+                </div>
+              </motion.button>
+            )}
+
+            {mockDeliveryAddresses.slice(0, 5).map((addr) => (
               <motion.button
                 key={addr.id}
                 onClick={() => {
                   if (activeLocationInput === 'current-location') {
                     handleCurrentLocationSelect(addr.address);
                   } else {
-                    // It's a stop ID
                     handleStopAddressSelect(activeLocationInput as string, addr.address, addr.description);
                   }
                 }}
