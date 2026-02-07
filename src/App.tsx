@@ -29,6 +29,8 @@ import { MessageProvider } from './contexts/MessageContext';
 import { RideProvider } from './contexts/RideContext';
 import { FoodOrderSessionProvider } from './contexts/FoodOrderSession';
 import { FoodPaymentProvider } from './contexts/FoodPaymentContext';
+import { DeliveryProvider } from './contexts/DeliveryContext';
+import { FoodDeliveryNew } from './pages/FoodDeliveryNew';
 import { CurrentRideBar } from './components/CurrentRideBar';
 import { WaitingForDriverBar } from './components/WaitingForDriverBar';
 import { RatingModal } from './components/RatingModal';
@@ -335,7 +337,7 @@ function AppContent() {
             />
             <Route
               path="/food-delivery"
-              element={<FoodDelivery />}
+              element={<FoodDeliveryNew />}
             />
             <Route
               path="/food-confirm-order"
@@ -446,9 +448,11 @@ function App() {
   return (
     <FoodOrderSessionProvider>
       <FoodPaymentProvider>
-        <Router>
-          <AppContent />
-        </Router>
+        <DeliveryProvider>
+          <Router>
+            <AppContent />
+          </Router>
+        </DeliveryProvider>
       </FoodPaymentProvider>
     </FoodOrderSessionProvider>
   );
